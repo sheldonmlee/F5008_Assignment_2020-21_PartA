@@ -1,0 +1,6 @@
+# only track source files
+Assessment_A/*
+!Assessment_A/src/
+
+# ignore pdf
+*.pdf
