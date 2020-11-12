@@ -1,17 +1,21 @@
 3.1
 	https://docs.oracle.com/javase/8/docs/api/java/util/TreeMap.html
 3.2
+	Description:
+		// description
+
 	TreeMap implements: 
 		NavigableMap <K, V>
 		Cloneable 
 		Serializable
+
 	Navigable Map methods: 
 		ceilingEntry(K key)
 		ceilingKey(K key)
 		descendingKeySet()
 		descendinMap()
 		firstEntry()
-		floorEntry(*K key)
+		floorEntry(K key)
 		floorKey(K key)
 		headMap(K toKey)
 		headMap()
@@ -28,5 +32,10 @@
 		tailMap(K fromKey)
 		tailmap(K fromKey, boolean inclusive)
 
+5.3
+	i.		BaseLineSimulation.collectstatistics()
+	ii.		BaseLineSimulation.testforcommunication()
+	iii.	BaseLineSimulation.move()
+	iv.		BaseLineSimulation.removeTheDead()
 
 
