@@ -6,30 +6,13 @@
 package org.KF5008.AssessmentA;
 
 import java.util.*;
-import org.KF5008.AssessmentA.AnyMobilePhone;
+import java.awt.Graphics2D;
 
 /**
  *
  * @author sheldonmlee
  */
 
-/**
- * represents Axis Aligned Bounding Box.
- * Consists of two coordinates:
- * 		(x1, y1)+ + + +
- * 		+             +
- * 		+             +
- * 		+ + + +(x1, y2)
- */
-class AABB
-{
-	int x1, y1, x2, y2;
-
-	AABB(int x1,int y1,int x2,int y2) 
-	{
-		this.x1 = x1; this.y1 = y1; this.x2 = x2; this.y2 = y2;
-	}
-}
 /**
  * Node node with four children
  */
@@ -81,16 +64,42 @@ class Node
 			phones.add(phone);
 		}
 	}
+	
+	public Node[] getChildren()
+	{
+		return new Node[] {nw, ne, sw, se};
+	}
+
+	public void draw(Graphics2D g) 
+	{
+		int x1, y1, x2, y2;
+		x1 = aabb.x1; y1 = aabb.y1; x2 = aabb.x2; y2 = aabb.y2;
+
+		g.drawLine(x1, y1, x2, y1);
+		g.drawLine(x2, y1, x2, y2);
+		g.drawLine(x2, y2, x1, y2);
+		g.drawLine(x1, y2, x1, y1);
+
+		for (Node node : getChildren()) {
+			if (node == null) break;
+			node.draw(g);
+		}
+	}
 
 }
 
 public class QuadTree
 {
-	Node root;
+	Node root = null;
+	AABB aabb;
+	int max;
+
 	QuadTree(AABB aabb, int max) 
 	{
+		this.aabb = aabb;
+		this.max = max;
+		this.root = new Node(aabb, max);
 		System.out.println("QuadTree constructor called.");
-		root = new Node(aabb, max);
 	}
 
 	void insert(AnyMobilePhone point)
@@ -98,9 +107,27 @@ public class QuadTree
 		root.insert(point);
 	}
 
+	//destroys and rebuilds quadtree from array of phones.
+	public void construct(AnyMobilePhone[] phones)
+	{
+		root = null;
+		root = new Node(aabb, max);
+		for ( AnyMobilePhone phone: phones) {
+			insert(phone);
+		}
+	}
+
+	public void draw(Graphics2D g)
+	{
+		if (g == null) return;
+		if (root == null) return;
+		root.draw(g);
+	}
+
 	public static void main(String args[])
 	{
-		QuadTree quadtree = new QuadTree();
+		QuadTree quadtree = new QuadTree(new AABB(0, 0, 0, 0), 1);
 		Node node = new Node(new AABB(0, 0, 0, 0), 1);
 	}
+
 }
