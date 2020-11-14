@@ -217,8 +217,8 @@ public class BaseLineSimulation  implements AnySimulationModel
     @Override 
     public void  collectStatistics( )
     { 
-        List<MobilePhone>  uninfectedCount = new LinkedList< >( ) ; 
-        List<MobilePhone>  infectedCount = new LinkedList< >( ) ; 
+        List<MobilePhone>  uninfectedCount = new ArrayList< >( ) ; 
+        List<MobilePhone>  infectedCount = new ArrayList< >( ) ; 
         double totalDist = 0 ;
         double unifectedDensity = 0 ; 
         double infectedDensity = 0 ; 
@@ -326,6 +326,12 @@ public class BaseLineSimulation  implements AnySimulationModel
         return true;
     }
     
+	// Custom
+	public QuadTree getQuadTree() 
+	{
+		System.out.println("BaseLine Has no quadtree.");
+		return null;
+	}
     
 }
 
