@@ -138,6 +138,11 @@ public class VisualisationPanel extends JPanel implements MouseWheelListener
        {
            phone.draw(g2);
        }
+
+	   if (model instanceof StudentSimulation) {
+		   // draw quadtree
+			model.getQuadTree().draw(g2);
+	   }
        model.step();
        Toolkit.getDefaultToolkit().sync();
          g2.scale(1,1);
