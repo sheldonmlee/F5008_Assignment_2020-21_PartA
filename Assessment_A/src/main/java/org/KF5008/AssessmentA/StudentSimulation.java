@@ -14,16 +14,11 @@ import java.util.*;
  */
 public class StudentSimulation extends BaseLineSimulation  
 {
-    
+	private QuadTree quadtree;
+
     public   StudentSimulation(  )
     { 
-       super( );
-       
-       this.allPhones = new  LinkedList<MobilePhone>(  ); 
-       communicatedGrowthData  = new LinkedList<>( ) ; 
-       
-       generate( 500, 0,0 , 1024, 800   ); // don't change this line. 
-       
+		this( 500, 0,0 , 1024, 800   ); // don't change this line. 
     }
     //--------------------------------------------------------------------------
     public  StudentSimulation( int howMany  ,int minhoz, int minVert , int maxHoz , int maxVert )
@@ -32,6 +27,13 @@ public class StudentSimulation extends BaseLineSimulation
        this.allPhones = new  LinkedList<MobilePhone>(  ); 
        communicatedGrowthData  = new LinkedList<>( ) ; 
        
+	   this.quadtree = new QuadTree(new AABB(minhoz, minVert, maxHoz, maxVert), 1);
+
+	   resizeCallback = (int a, int b, int c, int d) -> {
+		   System.out.printf("Resize Called: %d,%d,%d,%d\n", a, b, c, d);
+		   this.quadtree.resize(new AABB(a, b, c, d));
+	   };
+
        generate( howMany  , minhoz,  minVert ,  maxHoz ,  maxVert ); // don't change this line. 
     }
     //--------------------------------------------------------------------------
@@ -124,22 +126,36 @@ public class StudentSimulation extends BaseLineSimulation
     @Override
      public void  testforcomunication()
     { 
-       for( int a = 0 ; a < allPhones.size() ; a++  )
-        { 
-            MobilePhone p = allPhones.get(a); // 7756 
-         
-           for( int b = 0 ; b <  allPhones.size() ; b++  )
-           { 
-               MobilePhone other = allPhones.get(b); // 36,597
-               if( other == p )continue ; 
-               if( p.isSperationLessThan( p.getHoz(), p.getVert() , 
-                       other.getHoz() , other.getVert() , p.getCommuncationRadius() ) )
-               { 
-                    p.communicate(other);
-               }
-           } 
-        } 
-    } 
+		//for( int a = 0 ; a < allPhones.size() ; a++  )
+		//{
+		//	MobilePhone p = allPhones.get(a); // 7756
+		//	
+		//	for( int b = 0 ; b <  allPhones.size() ; b++  )
+		//	{
+		//		MobilePhone other = allPhones.get(b); // 36,597
+		//		if( other == p )continue ;
+		//		if( p.isSperationLessThan( p.getHoz(), p.getVert() ,
+		//				other.getHoz() , other.getVert() , p.getCommuncationRadius() ) )
+		//		{
+		//			p.communicate(other);
+		//		}
+		//	}
+		//}
+		for (MobilePhone p : allPhones) {
+			int x = p.getHoz(), y = p.getVert(), r = p.getCommuncationRadius();
+			
+			AABB searchBox = new AABB(x-r, y-r, x+r, y+r);
+			ArrayList<MobilePhone> closePhones = quadtree.query(searchBox);
+			System.out.printf("original: %d, quad: %d delta: %d\n", allPhones.size(), closePhones.size(), allPhones.size()-closePhones.size());
+			for (MobilePhone other : closePhones) {
+				if( p.isSperationLessThan( p.getHoz(), p.getVert() ,
+						other.getHoz() , other.getVert() , p.getCommuncationRadius() ) )
+				{
+					p.communicate(other);
+				}
+			}
+		}
+	} 
      //--------------------------------------------------------------------------
     /**
      * Note adding at location 0 is not crital to operation. 
@@ -192,12 +208,13 @@ public class StudentSimulation extends BaseLineSimulation
     @Override 
     public void  collectStatistics( )
     { 
-        List<MobilePhone>  uninfectedCount = new LinkedList< >( ) ; 
-        List<MobilePhone>  infectedCount = new LinkedList< >( ) ; 
+        List<MobilePhone>  uninfectedCount = new ArrayList< >( ) ; 
+        List<MobilePhone>  infectedCount = new ArrayList< >( ) ; 
         double totalDist = 0 ;
         double unifectedDensity = 0 ; 
         double infectedDensity = 0 ; 
         double check ; 
+
 
         for( MobilePhone p: this.allPhones)
         { 
@@ -269,6 +286,7 @@ public class StudentSimulation extends BaseLineSimulation
     @Override
     public void step()
     { 
+		quadtree.construct(this.allPhones);
         move(); 
         testforcomunication() ;
         collectStatistics( ) ;
@@ -314,6 +332,12 @@ public class StudentSimulation extends BaseLineSimulation
         
         return fastSystemInSeconds;
      }
+
+	public QuadTree getQuadTree()
+	{
+		return quadtree;
+	}
+
     //--------------------------------------------------------------------------
     /* 
         this is a conveniance function -  you can use this to profile your code. 

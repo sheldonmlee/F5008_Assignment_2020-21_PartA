@@ -25,15 +25,10 @@ public class BaseLineSimulation  implements AnySimulationModel
     List<MobilePhone> allPhones; 
     List<Integer> communicatedGrowthData ; 
     int things = 24 ; 
-    
-    public  BaseLineSimulation(  )
-    { 
-       this.allPhones = new  LinkedList<MobilePhone>(  ); 
-       communicatedGrowthData  = new LinkedList<>( ) ; 
-       // this.allPhones = new ArrayList< MobilePhone >( 100 ) :
-       generate( 100 , 0 , 0 , 800, 600 ); 
-       
-    }
+
+	protected ResizeCallback resizeCallback;
+	
+    public  BaseLineSimulation(  ) { this(100, 0, 0, 800, 600); }
     //--------------------------------------------------------------------------
     public  BaseLineSimulation( int howMany  ,int minhoz, int minVert , int maxHoz , int maxVert )
     { 
@@ -41,7 +36,10 @@ public class BaseLineSimulation  implements AnySimulationModel
        this. communicatedGrowthData  = new LinkedList<>( ) ; 
        // this.allPhones = new ArrayList< MobilePhone >( 100 ) :
        generate( howMany  , minhoz,  minVert ,  maxHoz ,  maxVert ); 
-       
+
+	   resizeCallback = (int a, int b, int c, int d) -> {
+		   System.out.printf("Resize Called: %d,%d,%d,%d\n", a, b, c, d);
+	   } ;
     }
     @Override public String getSimuationName( ) { return "Base line simuation"; } 
     @Override  public  int getMaxHoz( ) 
@@ -61,43 +59,44 @@ public class BaseLineSimulation  implements AnySimulationModel
     }
     //--------------------------------------------------------------------------
     @Override
-    public void generate( int howMany  ,int minhoz, int minVert , int maxHoz , int maxVert  ) 
+    public void generate( int howMany  ,int minhoz, int minVert , int maxHoz , int maxVert) 
     { 
-        System.out.println(" **BASE LINE** GENERATE " + howMany  );
-        assert  maxHoz > minhoz ; 
-        assert  maxVert > minVert; 
-        assert howMany > 0 ; 
-        this.minhoz = minhoz ; 
-        this.maxHoz = maxHoz ; 
-        this.minVert = minVert;
-        this.maxVert = maxVert ; 
-        this.allPhones = new  ArrayList<MobilePhone>(  ); 
-         
-        MobilePhone mx = null ; 
-        for( int a = 0 ; a < howMany ;a++)
-        { 
-            //int h = minhoz + (int)( Math.random() * ( maxHoz - minhoz )); 
-            //int v = minVert + (int)( Math.random() * (maxVert -minVert )) ; 
-            
-            mx = new MobilePhone( minhoz,  minVert ,  maxHoz ,  maxVert); 
-             
-            allPhones.add( (int) allPhones.size()/2 , mx ); 
-            assert  mx.getHoz()  <=  maxHoz; 
-            assert  mx.getHoz()  >=  minhoz; 
-            assert  mx.getVert()  <=  maxVert;
-            assert  mx.getVert()  >=  minVert;
-        }
-       if( howMany > 0 )
-       { 
-            // assert mx != null  : "MX IS NULL "; 
-            // if( mx != null )  mx.setHasMessage(true);else {  System.out.println("no MX"); }
-            assert allPhones.get(0) != null ; 
-            allPhones.get(0).setHasMessage(true);
-            System.out.println(" END OF generate " + howMany + " " + allPhones.size() 
-                    + " \n" + allPhones.get(0)  + "\n" +allPhones.get(1) + "\n");
-            assert( allPhones.get(0).hasMessage() ==true  ); 
-            assert howMany == allPhones.size() ; 
-        } 
+		System.out.println(" **BASE LINE** GENERATE " + howMany  );
+		assert  maxHoz > minhoz ;
+		assert  maxVert > minVert;
+		//assert howMany > 0 ;
+		this.minhoz = minhoz ;
+		this.maxHoz = maxHoz ;
+		this.minVert = minVert;
+		this.maxVert = maxVert ;
+		this.allPhones = new  ArrayList<MobilePhone>(  );
+		
+		MobilePhone mx = null ;
+		for( int a = 0 ; a < howMany ;a++)
+		{
+			//int h = minhoz + (int)( Math.random() * ( maxHoz - minhoz ));
+			//int v = minVert + (int)( Math.random() * (maxVert -minVert )) ;
+			
+			mx = new MobilePhone( minhoz,  minVert ,  maxHoz ,  maxVert);
+			
+			allPhones.add( (int) allPhones.size()/2 , mx );
+			assert  mx.getHoz()  <=  maxHoz;
+			assert  mx.getHoz()  >=  minhoz;
+			assert  mx.getVert()  <=  maxVert;
+			assert  mx.getVert()  >=  minVert;
+		}
+		if( howMany > 0 )
+		{
+			// assert mx != null  : "MX IS NULL ";
+			// if( mx != null )  mx.setHasMessage(true);else {  System.out.println("no MX"); }
+			assert allPhones.get(0) != null ;
+			allPhones.get(0).setHasMessage(true);
+			System.out.println(" END OF generate " + howMany + " " + allPhones.size()
+					+ " \n" + allPhones.get(0)  + "\n" +allPhones.get(1) + "\n");
+			assert( allPhones.get(0).hasMessage() ==true  );
+			assert howMany == allPhones.size() ;
+		}
+		if (resizeCallback != null) resizeCallback.call(minhoz, minVert, maxHoz,  maxVert);
     }
     //--------------------------------------------------------------------------
     /****
@@ -156,8 +155,7 @@ public class BaseLineSimulation  implements AnySimulationModel
                 double squr = p.getCommuncationRadius() * p.getCommuncationRadius(); 
                 double v = p.getVert() - other.getVert() ; 
                 double h = p.getHoz() - other.getHoz() ; 
-                double d = ( v* v ) + ( h * h ); 
-
+                double d = ( v* v ) + ( h * h );
                 if(  d <=  squr )
                 { 
                     p.communicate(other);
