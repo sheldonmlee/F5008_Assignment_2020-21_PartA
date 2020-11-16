@@ -18,9 +18,10 @@ import java.awt.Graphics2D;
  */
 class Node 
 {
-	private ArrayList<AnyMobilePhone> phones;
+	private ArrayList<MobilePhone> phones;
 	private AABB aabb;
 	int max;
+	int depth;
 
 	private Node nw = null;
 	private Node ne = null;
@@ -29,44 +30,78 @@ class Node
 
 	private void subdivide()
 	{
+		int x1, y1, x2, y2;
+		x1 = aabb.x1;
+		y1 = aabb.y1;
+		x2 = aabb.x2;
+		y2 = aabb.y2;
+
+		if (x1 == x2 || y1 == y2) return;
+
 		int half_x, half_y;
-		half_x = (aabb.x1 + aabb.x2)/2 ;
-		half_y = (aabb.y1 + aabb.y2)/2 ;
+		half_x = (x1 + x2)/2 ;
+		half_y = (y1 + y2)/2 ;
 
-		nw = new Node(new AABB(aabb.x1, aabb.y1, half_x-1, half_y-1), max);
-		ne = new Node(new AABB(half_x, aabb.y1, aabb.x2, half_y-1), max);
-		sw = new Node(new AABB(aabb.x1, half_y, half_x-1, aabb.y2), max);
-		se = new Node(new AABB(half_x, half_y, aabb.x2, aabb.y2), max);
+		nw = new Node(new AABB(x1, y1, half_x, half_y), max, depth+1);
+		ne = new Node(new AABB(half_x, y1, x2, half_y), max, depth+1);
+		sw = new Node(new AABB(x1, half_y, half_x, y2), max, depth+1);
+		se = new Node(new AABB(half_x, half_y, x2, y2), max, depth+1);
 
+		phones.forEach((phone) -> {
+			insertIntoChildren(phone);
+		});
+		phones = null;
 	}
 
-	public Node(AABB aabb, int max)
+	// put phone into correct children
+	private void insertIntoChildren(MobilePhone phone) {
+		Node nodes[] = getChildren();
+		if (nodes == null) return;
+		for (Node node : nodes) {
+			if (node.aabb.phoneInside(phone)) node.insert(phone);
+		}
+	}
+
+	public Node(AABB aabb, int max, int depth)
 	{
 		this.phones = new ArrayList<>();
 		this.aabb = aabb;
 		this.max = max; 
+		this.depth = depth;
 	}
 
-	// insert
-	public void insert(AnyMobilePhone phone)
+	// insert into self if not subdivided and subdivide if it is maxed, 
+	// otherwise insert into correct children.
+	public void insert(MobilePhone phone)
 	{
-		if (phones.size() + 1 > max) {
-			subdivide();
-
-			// put phones into correct children
-			for (int i = 0; i < phones.size(); i++) {
-			}
-			
-			// free as contents will be copied down to children
-			phones = null;
+		if (nw == null) {
+			if ((phones.size() + 1) > max) subdivide();
+			else if(aabb.phoneInside(phone)) phones.add(phone);
 		}
 		else {
-			phones.add(phone);
+			insertIntoChildren(phone);
 		}
 	}
-	
+
+	public void query(AABB queryAABB, ArrayList<MobilePhone> returnArray)
+	{
+		if (nw == null && phones != null) {
+			for (MobilePhone phone : phones){
+				returnArray.add(phone);
+			}
+		}
+		else {
+			Node nodes[] = getChildren(); if (nodes == null) return;
+			for (Node node : nodes) {
+				if (queryAABB.intersects(node.aabb)) node.query(aabb, returnArray);
+			}
+		}
+	}
+
+
 	public Node[] getChildren()
 	{
+		if (nw == null) return null;
 		return new Node[] {nw, ne, sw, se};
 	}
 
@@ -80,54 +115,66 @@ class Node
 		g.drawLine(x2, y2, x1, y2);
 		g.drawLine(x1, y2, x1, y1);
 
-		for (Node node : getChildren()) {
-			if (node == null) break;
+		Node children[] = getChildren();
+		if (children == null) return;
+		for (Node node : children) {
 			node.draw(g);
 		}
 	}
-
 }
 
 public class QuadTree
 {
-	Node root = null;
-	AABB aabb;
-	int max;
+	private Node root = null;
+	private AABB aabb;
+	private int max;
 
-	QuadTree(AABB aabb, int max) 
+	public QuadTree(AABB aabb, int max) 
 	{
 		this.aabb = aabb;
 		this.max = max;
-		this.root = new Node(aabb, max);
+		this.root = new Node(aabb, max, 0);
 		System.out.println("QuadTree constructor called.");
 	}
 
-	void insert(AnyMobilePhone point)
+	public void insert(MobilePhone point)
 	{
 		root.insert(point);
 	}
 
+	public ArrayList<MobilePhone> query(AABB queryAABB) 
+	{
+		ArrayList<MobilePhone> returnArray = new ArrayList<>();
+		root.query(queryAABB, returnArray);
+		return returnArray;
+	}
+
+	public void resize(AABB aabb)
+	{
+		this.aabb = aabb;
+		this.root = new Node(aabb, max, 0);
+		System.out.printf("Resize Called: %d,%d,%d,%d\n", aabb.x1,aabb.y1,aabb.x2,aabb.y2);
+	}
+
 	//destroys and rebuilds quadtree from array of phones.
-	public void construct(AnyMobilePhone[] phones)
+	public void construct(List<MobilePhone> phones)
 	{
 		root = null;
-		root = new Node(aabb, max);
-		for ( AnyMobilePhone phone: phones) {
-			insert(phone);
+		root = new Node(aabb, max, 0);
+
+		for (int i = 0; i < phones.size(); i++) {
+			insert(phones.get(i));
 		}
 	}
 
 	public void draw(Graphics2D g)
 	{
-		if (g == null) return;
-		if (root == null) return;
 		root.draw(g);
 	}
 
 	public static void main(String args[])
 	{
 		QuadTree quadtree = new QuadTree(new AABB(0, 0, 0, 0), 1);
-		Node node = new Node(new AABB(0, 0, 0, 0), 1);
 	}
 
 }

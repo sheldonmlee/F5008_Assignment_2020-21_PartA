@@ -28,9 +28,15 @@ class AABB
 		this.x1 = x1; this.y1 = y1; this.x2 = x2; this.y2 = y2;
 	}
 	
+	private static boolean rangeIntersects(int l1, int u1, int l2, int u2)
+	{
+		return (l1 <= l2 && l2 <= u1 ||
+				l1 <= u2 && u2 <= u1);
+	}
+
 	private static boolean inRange(int x, int lower, int upper)
 	{
-		return lower <= x || x <= upper;
+		return lower <= x && x <= upper;
 	}
 
 	public boolean phoneInside(AnyMobilePhone phone)
@@ -43,6 +49,12 @@ class AABB
 
 	public boolean intersects(AABB other)
 	{
-		return false;
+		return 
+			rangeIntersects(this.x1, this.x2, other.x1, other.x2) &&
+			rangeIntersects(this.y1, this.y2, other.y1, other.y2);
+	}
+
+	public static void main(String args[])
+	{
 	}
 }
