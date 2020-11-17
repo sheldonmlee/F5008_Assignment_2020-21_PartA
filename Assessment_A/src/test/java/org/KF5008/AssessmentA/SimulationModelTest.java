@@ -25,15 +25,17 @@ public class SimulationModelTest {
     
     public static void main(String args[])
     { 
-        int loops =  20; 
-        int targeSize = 2_100; // was 2_100 
+        //int loops =  20; 
+        //int targeSize = 2_100; // was 2_100 
        
-        System.out.println( " STARTING  RUN 7  " + loops + " " + targeSize );
-        final int DIM = 500;
-         
-        double baseLineInSeconds = runBaseLineVersion(   loops ,  targeSize,   DIM  ) ;
-        System.out.println( " END  RUN  " );
-        System.out.println(" Student  TIME "  + baseLineInSeconds + " seconds" );
+        //System.out.println( " STARTING  RUN 7  " + loops + " " + targeSize );
+        //final int DIM = 500;
+        // 
+        //double baseLineInSeconds = runBaseLineVersion(   loops ,  targeSize,   DIM  ) ;
+        //System.out.println( " END  RUN  " );
+        //System.out.println(" Student  TIME "  + baseLineInSeconds + " seconds" );
+
+		testSpeed();
     }
     
     //--------------------------------------------------------------------------
@@ -163,7 +165,7 @@ public class SimulationModelTest {
     @org.junit.jupiter.api.Test
     static public void testSpeed()
     {
-        int targeSize = 2_100; 
+        int targeSize = 100_000; 
         final int DIM = 1_000;
         double speedFactor = 0 ; 
         double markScale = 100./5. ; 
