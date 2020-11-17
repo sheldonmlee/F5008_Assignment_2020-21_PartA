@@ -146,7 +146,6 @@ public class StudentSimulation extends BaseLineSimulation
 			
 			AABB searchBox = new AABB(x-r, y-r, x+r, y+r);
 			ArrayList<MobilePhone> closePhones = quadtree.query(searchBox);
-			System.out.printf("original: %d, quad: %d delta: %d\n", allPhones.size(), closePhones.size(), allPhones.size()-closePhones.size());
 			for (MobilePhone other : closePhones) {
 				if( p.isSperationLessThan( p.getHoz(), p.getVert() ,
 						other.getHoz() , other.getVert() , p.getCommuncationRadius() ) )
