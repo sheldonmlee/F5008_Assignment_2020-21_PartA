@@ -30,8 +30,7 @@ class AABB
 	
 	private static boolean rangeIntersects(int l1, int u1, int l2, int u2)
 	{
-		return (l1 <= l2 && l2 <= u1 ||
-				l1 <= u2 && u2 <= u1);
+		return (l2 <= u1 && u2  >= l1);
 	}
 
 	private static boolean inRange(int x, int lower, int upper)
@@ -49,9 +48,17 @@ class AABB
 
 	public boolean intersects(AABB other)
 	{
-		return 
+		boolean intersects =
 			rangeIntersects(this.x1, this.x2, other.x1, other.x2) &&
 			rangeIntersects(this.y1, this.y2, other.y1, other.y2);
+
+		//System.out.printf("This: %s, Other: %s\nreturns: %b\n", this.toString(), other.toString(), intersects);
+		return intersects;
+	}
+
+	public String toString()
+	{
+		return String.format("(%d, %d), (%d, %d)", x1, y1, x2, y2);
 	}
 
 	public static void main(String args[])
