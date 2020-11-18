@@ -30,7 +30,7 @@ class AABB
 	
 	private static boolean rangeIntersects(int l1, int u1, int l2, int u2)
 	{
-		return (l2 <= u1 && u2  >= l1);
+		return (l2 <= u1 && u2 >= l1);
 	}
 
 	private static boolean inRange(int x, int lower, int upper)
