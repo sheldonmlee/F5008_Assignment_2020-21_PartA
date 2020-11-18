@@ -91,7 +91,7 @@ class Node
 	private Node se = null;
 
 	private boolean canSubdivide() {
-		return (aabb.x2-aabb.x1) > 2 && (aabb.y2-aabb.y1) > 2;
+		return (aabb.x2-aabb.x1) > 1 && (aabb.y2-aabb.y1) > 1;
 	}
 	private void subdivide()
 	{
@@ -184,13 +184,14 @@ class Node
 
 	public void draw(Graphics2D g) 
 	{
+		if (nw == null) return;
 		int x1, y1, x2, y2;
 		x1 = aabb.x1; y1 = aabb.y1; x2 = aabb.x2; y2 = aabb.y2;
+		int half_x = (x1 + x2)/2;
+		int half_y = (y1 + y2)/2;
 
-		g.drawLine(x1, y1, x2, y1);
-		g.drawLine(x2, y1, x2, y2);
-		g.drawLine(x2, y2, x1, y2);
-		g.drawLine(x1, y2, x1, y1);
+		g.drawLine(half_x, y1, half_x, y2);
+		g.drawLine(x1, half_y, x2, half_y);
 
 		Node children[] = getChildren();
 		if (children == null) return;
