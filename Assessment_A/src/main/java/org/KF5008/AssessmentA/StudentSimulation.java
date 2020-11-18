@@ -207,75 +207,24 @@ public class StudentSimulation extends BaseLineSimulation
     @Override 
     public void  collectStatistics( )
     { 
-        List<MobilePhone>  uninfectedCount = new ArrayList< >( ) ; 
-        List<MobilePhone>  infectedCount = new ArrayList< >( ) ; 
+		int uninfectedCount = 0;
+		int infectedCount = 0;
         double totalDist = 0 ;
         double unifectedDensity = 0 ; 
         double infectedDensity = 0 ; 
         double check ; 
 
-
-        for( MobilePhone p: this.allPhones)
-        { 
-            if( p.hasMessage( ) == false )// ADD TO THE FALSE LIST 
-            { 
-                 // only add to list if not added already in. 
-                boolean found  = false ; 
-                for( int a = 0 ; a < uninfectedCount.size() ; a++ )
-                { 
-                    MobilePhone  other = uninfectedCount.get(a);
-                  
-                    if( p == other )   found = true;
-                }
-                if(found == false )
-                {  
-                     uninfectedCount.add(uninfectedCount.size( ) /2, p);
-                 
-                     
-                    for( int b = 0 ;  b <  infectedCount.size( ) ; b++)
-                    { 
-                         MobilePhone  other =  infectedCount.get( b); 
-                        
-                         if( other == p )
-                         { 
-                             System.out.println("Illegal cross contamination"); 
-                             assert false ; 
-                         }
-                    }
-                }
-            }else 
-            { 
-                // only add to list if not added already in. 
-                boolean found  = false ; 
-                for( int a = 0 ; a < infectedCount.size() ; a++ )
-                { 
-                    MobilePhone  other = infectedCount.get(a); 
-                  
-                    if( p == other )   found = true;
-                }
-                if(found == false )
-                {  
-                    infectedCount.add(infectedCount.size( ) /2, p);// there is no reason to add in the middle
-                   
-    
-                    for( int b = 0 ;  b <  uninfectedCount.size( ) ; b++)
-                    { 
-                         MobilePhone  other =  uninfectedCount.get( b); 
-                         if( other == p )
-                         { 
-                             System.out.println("Illegal cross contamination"); 
-                             assert false ; 
-                         }
-                    }
-                } 
-            }// end if p.hasMessage( ) == false
-        }
-        communicatedGrowthData.add(  infectedCount.size( ) ); 
-        if( false ) System.out.printf(" INFECTED %d UNiNFECTED %d density %g, %g \n", infectedCount.size( ),
-                                                   uninfectedCount.size() , 
-                                                   ( totalDist/uninfectedCount.size() ) , 
-                                                   (infectedDensity/infectedCount.size( ))  );
-        numberOfInfected = uninfectedCount.size();  
+		for (MobilePhone p : this.allPhones) 
+		{
+			infectedCount += p.hasMessage()? 1 : 0;
+			uninfectedCount += p.hasMessage()? 0 : 1;
+		}
+        communicatedGrowthData.add(  infectedCount ); 
+        if( false ) System.out.printf(" INFECTED %d UNiNFECTED %d density %g, %g \n", infectedCount,
+                                                   uninfectedCount , 
+                                                   ( totalDist/uninfectedCount ) , 
+                                                   (infectedDensity/infectedCount)  );
+        numberOfInfected = uninfectedCount;  
     }
     
     //--------------------------------------------------------------------------
