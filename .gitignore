@@ -2,5 +2,6 @@
 Assessment_A/*
 !Assessment_A/src/
 
-# ignore pdf
-*.pdf
+# ignore output files
+answers.*
+!answers.md
