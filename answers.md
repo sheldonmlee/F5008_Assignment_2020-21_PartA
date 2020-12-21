@@ -56,11 +56,18 @@
 
 ### put():
 
+The **put()** method takes a key-value pair, inserts it into the data
+structure, be it HashMap or TreeMap. Both of them places them in a
+position depending on the key. For HashMap, the key-value pair will be
+placed in an internal array, where the index is based on the hash
+value of the key. Whereas in TreeMap, the key-value pair is placed in
+a sorted position in a binary tree.
+
 The **put()** method in Hashmap has a better time complexity of O(1)
 when compared to that of TreeMap's, which has a time complexity of
-O(log(n)). However, if the overhead is accounted for, TreeMap could
-see less time taken when using **put()**.  Otherwise in the long run,
-should take less time accessing it's values using **put()**.
+O(log(n)). However, if the overhead is considered, TreeMap could see
+less time taken when using **put()**.  Otherwise in the long run,
+Hashmap should take less time accessing it's values using **put()**.
 
 To achieve the time complexity of O(1), HashMap uses hashing to obtain
 the index of it's internal array for the item. HashMap uses Java's own
@@ -69,16 +76,37 @@ complexity of O(1) is dependant on the hash function's ability to
 produce a completely different value with little change to the input
 value, in hopes to reduce the number of collisions. 
 
-The **put()** method finds the value based on the key. TreeMap is
-binary tree were the nodes are sorted by the key on the Key Value
-pairs. As **put()** takes in the key as the value, it would take a
-binary search to find the key and it's corresponding value. Whereas
-There is no garauntee what order HashMap
+// explain a hashing algorithm
+
+An example of such hashing algorithm would be the MD5 algorithm.
+Though outdated and insecure for cryptographic purposes nowadays, it
+would still be usefull for purposes similar to Java's HashMap. The
+algorithm would takes an input spit into blocks of 512 bits, resulting
+in a fixed output that is 128 bits long. If the size of the input is
+not divisible by 512 bits, additional padding would be required.
+
+TreeMap is binary tree were the nodes are sorted by the key on the
+Key-Value pairs. As **put()** takes in the key as the value, it would
+take a binary search to find the key and it's corresponding value.
+Whereas There is no guarantee what order HashMap puts items. TreeMap's
+internal tree is also known as a Red-black Tree.
+
+// explain Reb-black tree
+
+A Red-black tree is a type of binary tree which is self balancing on
+insert.
+
+// conclusion
+
+In conclusion, if order does not matter and all you need is pure
+lookup time in a large dataset, HashMap should be the choice of
+datastructre. However...
 
 #### todo notes:
 - Java HashMap uses hashCode().
 - Explain hashing / tree balancing / red black tree.
-- Explain usage (only accessing, or if you need sorting)
+- Explain usage (only accessing, or if you need sorting).
+- Memory overhead of HashMap (most buckets/array slots aren't used).
 
 ### merge():
 
