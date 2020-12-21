@@ -165,7 +165,7 @@ public class SimulationModelTest {
     @org.junit.jupiter.api.Test
     static public void testSpeed()
     {
-        int targeSize = 100_000; 
+        int targeSize = 5000; 
         final int DIM = 1_000;
         double speedFactor = 0 ; 
         double markScale = 100./5. ; 
@@ -174,10 +174,11 @@ public class SimulationModelTest {
         
         double baseSpeedSeconds = runBaseLineVersion(   2 ,  targeSize,   DIM  ) ;
         System.out.println( " END  RUN  " );
-        System.out.println( " BASE  TIME "  + baseSpeedSeconds + " seconds" );
         
         double fastSystemInSeconds =  runFastVersion (   2 ,  targeSize,   DIM   ) ;
         System.out.println( " END  RUN  " );
+
+        System.out.println( " BASE  TIME "  + baseSpeedSeconds + " seconds" );
         System.out.println( " FAST  TIME "  + fastSystemInSeconds + " seconds" );
                 
         System.err.printf(" RAW SPEED increase %g \n", speedFactor = (baseSpeedSeconds / fastSystemInSeconds) ); 
