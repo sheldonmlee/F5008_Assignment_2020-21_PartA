@@ -215,8 +215,8 @@ public class BaseLineSimulation  implements AnySimulationModel
     @Override 
     public void  collectStatistics( )
     { 
-        List<MobilePhone>  uninfectedCount = new ArrayList< >( ) ; 
-        List<MobilePhone>  infectedCount = new ArrayList< >( ) ; 
+        List<MobilePhone>  uninfectedCount = new LinkedList< >( ) ; 
+        List<MobilePhone>  infectedCount = new LinkedList< >( ) ; 
         double totalDist = 0 ;
         double unifectedDensity = 0 ; 
         double infectedDensity = 0 ; 
