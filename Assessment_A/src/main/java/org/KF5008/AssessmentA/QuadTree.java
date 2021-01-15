@@ -91,8 +91,9 @@ class Node
 	private Node se = null;
 
 	private boolean canSubdivide() {
-		return (aabb.x2-aabb.x1) > 1 && (aabb.y2-aabb.y1) > 1;
+		return (aabb.x2-aabb.x1) > 1 && (aabb.y2-aabb.y1) > 1 && (nw == null);
 	}
+
 	private void subdivide()
 	{
 		int x1, y1, x2, y2;
@@ -143,7 +144,7 @@ class Node
 			phones.forEach((n)->insertIntoChildren(n));
 			phones = null;
 		}
-		else phones.add(phone);
+		else phones.add(phone); 
 	}
 
 	public void query(AABB queryAABB, ArrayList<MobilePhone> returnArray)

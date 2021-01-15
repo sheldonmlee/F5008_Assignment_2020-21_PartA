@@ -26,8 +26,6 @@ public class BaseLineSimulation  implements AnySimulationModel
     List<Integer> communicatedGrowthData ; 
     int things = 24 ; 
 
-	protected ResizeCallback resizeCallback;
-	
     public  BaseLineSimulation(  ) { this(100, 0, 0, 800, 600); }
     //--------------------------------------------------------------------------
     public  BaseLineSimulation( int howMany  ,int minhoz, int minVert , int maxHoz , int maxVert )
@@ -36,10 +34,6 @@ public class BaseLineSimulation  implements AnySimulationModel
        this. communicatedGrowthData  = new LinkedList<>( ) ; 
        // this.allPhones = new ArrayList< MobilePhone >( 100 ) :
        generate( howMany  , minhoz,  minVert ,  maxHoz ,  maxVert ); 
-
-	   resizeCallback = (int a, int b, int c, int d) -> {
-		   System.out.printf("Resize Called: %d,%d,%d,%d\n", a, b, c, d);
-	   } ;
     }
     @Override public String getSimuationName( ) { return "Base line simuation"; } 
     @Override  public  int getMaxHoz( ) 
@@ -96,7 +90,6 @@ public class BaseLineSimulation  implements AnySimulationModel
 			assert( allPhones.get(0).hasMessage() ==true  );
 			assert howMany == allPhones.size() ;
 		}
-		if (resizeCallback != null) resizeCallback.call(minhoz, minVert, maxHoz,  maxVert);
     }
     //--------------------------------------------------------------------------
     /****

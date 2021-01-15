@@ -14,11 +14,6 @@ import java.util.List;
  */
 public interface AnySimulationModel
 {
-	// callback for resize
-	interface ResizeCallback {
-		void call(int minhoz, int minVert , int maxHoz , int maxVert);
-	}
-
     public List<MobilePhone> getAllPhones() ; 
     
     void generate( int howMany , int minhoz, int minVert , int maxHoz , int maxVert); 

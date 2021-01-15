@@ -14,6 +14,13 @@ import java.util.*;
  */
 public class StudentSimulation extends BaseLineSimulation  
 {
+	// callback for resize
+	interface ResizeCallback {
+		void call(int minhoz, int minVert , int maxHoz , int maxVert);
+	}
+	
+	protected ResizeCallback resizeCallback;
+
 	private QuadTree quadtree;
 
     public   StudentSimulation(  )
@@ -24,7 +31,7 @@ public class StudentSimulation extends BaseLineSimulation
     public  StudentSimulation( int howMany  ,int minhoz, int minVert , int maxHoz , int maxVert )
     { 
        super( howMany  , minhoz,  minVert ,  maxHoz ,  maxVert ); 
-       this.allPhones = new  LinkedList<MobilePhone>(  ); 
+       this.allPhones = new  ArrayList<MobilePhone>(  ); 
        communicatedGrowthData  = new LinkedList<>( ) ; 
        
 	   this.quadtree = new QuadTree(new AABB(minhoz, minVert, maxHoz, maxVert), 1);
@@ -35,6 +42,13 @@ public class StudentSimulation extends BaseLineSimulation
 	   };
 
        generate( howMany  , minhoz,  minVert ,  maxHoz ,  maxVert ); // don't change this line. 
+    }
+
+    @Override
+    public void generate( int howMany  ,int minhoz, int minVert , int maxHoz , int maxVert) 
+    { 
+		super.generate(howMany, minhoz, minVert, maxHoz, maxVert);
+		if (resizeCallback != null) resizeCallback.call(minhoz, minVert, maxHoz,  maxVert);
     }
     //--------------------------------------------------------------------------
     /**
@@ -234,8 +248,8 @@ public class StudentSimulation extends BaseLineSimulation
     @Override
     public void step()
     { 
-		quadtree.construct(this.allPhones);
         move(); 
+		quadtree.construct(this.allPhones);
         testforcomunication() ;
         collectStatistics( ) ;
         removeTheDead( ) ; 
@@ -293,7 +307,7 @@ public class StudentSimulation extends BaseLineSimulation
     public static void main(String args[])
     { 
         int loops =  20; 
-        int targeSize = 2_100; // was 2_100 
+        int targeSize = 5000; // was 2_100 
        
         System.out.println( " STARTING  RUN Sudent  " + loops + " " + targeSize );
         final int DIM = 500;
