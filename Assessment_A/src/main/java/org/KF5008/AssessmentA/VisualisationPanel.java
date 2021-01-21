@@ -141,7 +141,7 @@ public class VisualisationPanel extends JPanel implements MouseWheelListener
 
 	   if (model instanceof StudentSimulation) {
 		   // draw quadtree
-			//model.getQuadTree().draw(g2);
+		   //model.getQuadTree().draw(g2);
 	   }
        model.step();
        Toolkit.getDefaultToolkit().sync();
