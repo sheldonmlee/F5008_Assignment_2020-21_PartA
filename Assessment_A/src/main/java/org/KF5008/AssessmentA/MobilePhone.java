@@ -166,9 +166,9 @@ public class MobilePhone implements AnyMobilePhone
              bounced = false ; 
        }else 
        g.setColor(Color.LIGHT_GRAY);
-       //g.fillOval((int)(hoz-radius), (int) (vert-radius), 2* radius , 2* radius);
-	   g.drawLine((int)(hoz-radius), (int) (vert-radius), (int)(hoz+radius), (int)(vert+radius));
-	   g.drawLine((int)(hoz+radius), (int) (vert-radius), (int)(hoz-radius), (int)(vert+radius));
+       g.fillOval((int)(hoz-radius), (int) (vert-radius), 2* radius , 2* radius);
+	   //g.drawLine((int)(hoz-radius), (int) (vert-radius), (int)(hoz+radius), (int)(vert+radius));
+	   //g.drawLine((int)(hoz+radius), (int) (vert-radius), (int)(hoz-radius), (int)(vert+radius));
        
        if( this.hasMessage == true )
        {
@@ -177,9 +177,9 @@ public class MobilePhone implements AnyMobilePhone
        {
             g.setColor(Color.BLACK);
        }
-       //g.fillOval( (int)(hoz-3),(int)(vert-3) , 5 ,5 );
-	   g.drawLine((int)hoz, (int)(vert-radius/2), (int)hoz, (int)(vert+radius/2));
-	   g.drawLine((int)(hoz-radius/2), (int)vert, (int)(hoz+radius/2), (int)vert);
+       g.fillOval( (int)(hoz-3),(int)(vert-3) , 5 ,5 );
+	   //g.drawLine((int)hoz, (int)(vert-radius/2), (int)hoz, (int)(vert+radius/2));
+	   //g.drawLine((int)(hoz-radius/2), (int)vert, (int)(hoz+radius/2), (int)vert);
        
       
        for( AnyMobilePhone p: this.interactedPhones )
