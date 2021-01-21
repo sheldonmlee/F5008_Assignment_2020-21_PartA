@@ -57,53 +57,53 @@ public class StudentSimulation extends BaseLineSimulation
      *  @Author Giles Motgomary Smith 
      */
     void findMessageRoute( )
-    { 
-        testforcomunication( ) ; 
-         int phoneA = (int)( Math.random() * allPhones.size()) ; 
-         int phoneB  ; 
-         do
-         { 
-             phoneB = (int) (Math.random() * allPhones.size()) ; 
-             System.out.printf(" %d %d " , phoneA, phoneB ); 
-         } while( phoneB == phoneA  ); 
-         
-         MobilePhone from = allPhones.get( phoneA ); 
-         MobilePhone too = allPhones.get( phoneA ); 
-         List< MobilePhone> innterSet = new ArrayList<> ( ) ; 
-         List< MobilePhone> outerEdge = new ArrayList<> ( ) ; 
-         
-         for( MobilePhone it:allPhones  )it.setDepth( Integer.MAX_VALUE-10); 
-        innterSet.add( from ); 
-        from.setDepth(0);
-        
-        for( MobilePhone it: innterSet )
-        { 
-            for( int a = 0 ; a < it.interactedPhones.size( ) ; a ++ )
-            {  
-                MobilePhone other =  (MobilePhone) it.interactedPhones.get(a); 
-             
-                if( other == it ) continue ; 
-                System.out.println( "depth before  " +  other.depth + " " + (it.depth+1) ); 
-                if( other.depth > ( it.depth+1 ) )
-                { 
-                  
-                    other.depth  = it.depth+1 ; 
-                    if( !outerEdge.contains(it)) 
-                    { 
-                        outerEdge.add( it ) ;
-                        System.out.println( "adding " +  other.depth);
-                    }else 
-                        System.out.println( "contains " +  other.depth);
-                }
-                System.out.println( "depth after  " +  other.depth);
-            }
-        }
-        System.out.println( "--------DEPTHS size = " + outerEdge.size()); 
-     
-        for( MobilePhone it: outerEdge ) 
-       { 
-            System.out.println( it.depth ); 
-       }
+	{ 
+		testforcomunication( ) ; 
+		int phoneA = (int)( Math.random() * allPhones.size()) ; 
+		int phoneB  ; 
+		do
+		{ 
+			phoneB = (int) (Math.random() * allPhones.size()) ; 
+			System.out.printf(" %d %d " , phoneA, phoneB ); 
+		} while( phoneB == phoneA  ); 
+
+		MobilePhone from = allPhones.get( phoneA ); 
+		MobilePhone too = allPhones.get( phoneA ); 
+		List< MobilePhone> innterSet = new ArrayList<> ( ) ; 
+		List< MobilePhone> outerEdge = new ArrayList<> ( ) ; 
+
+		for( MobilePhone it:allPhones  )it.setDepth( Integer.MAX_VALUE-10); 
+		innterSet.add( from ); 
+		from.setDepth(0);
+
+		for( MobilePhone it: innterSet )
+		{ 
+			for( int a = 0 ; a < it.interactedPhones.size( ) ; a ++ )
+			{  
+				MobilePhone other =  (MobilePhone) it.interactedPhones.get(a); 
+
+				if( other == it ) continue ; 
+				System.out.println( "depth before  " +  other.depth + " " + (it.depth+1) ); 
+				if( other.depth > ( it.depth+1 ) )
+				{ 
+
+					other.depth  = it.depth+1 ; 
+					if( !outerEdge.contains(it)) 
+					{ 
+						outerEdge.add( it ) ;
+						System.out.println( "adding " +  other.depth);
+					}else 
+						System.out.println( "contains " +  other.depth);
+				}
+				System.out.println( "depth after  " +  other.depth);
+			}
+		}
+		System.out.println( "--------DEPTHS size = " + outerEdge.size()); 
+
+		for( MobilePhone it: outerEdge ) 
+		{ 
+			System.out.println( it.depth ); 
+		}
         
         
     }
@@ -138,23 +138,8 @@ public class StudentSimulation extends BaseLineSimulation
      *  Test each phon  
      */
     @Override
-     public void  testforcomunication()
+	public void  testforcomunication()
     { 
-		//for( int a = 0 ; a < allPhones.size() ; a++  )
-		//{
-		//	MobilePhone p = allPhones.get(a); // 7756
-		//	
-		//	for( int b = 0 ; b <  allPhones.size() ; b++  )
-		//	{
-		//		MobilePhone other = allPhones.get(b); // 36,597
-		//		if( other == p )continue ;
-		//		if( p.isSperationLessThan( p.getHoz(), p.getVert() ,
-		//				other.getHoz() , other.getVert() , p.getCommuncationRadius() ) )
-		//		{
-		//			p.communicate(other);
-		//		}
-		//	}
-		//}
 		for (MobilePhone p : allPhones) {
 			int x = p.getHoz(), y = p.getVert(), r = p.getCommuncationRadius();
 			
