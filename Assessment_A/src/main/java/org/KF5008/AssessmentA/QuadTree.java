@@ -24,7 +24,6 @@ public class QuadTree
 		this.aabb = aabb;
 		this.max = max;
 		this.root = new Node(aabb, max, 0);
-		System.out.println("QuadTree constructor called.");
 	}
 
 	public void insert(MobilePhone point)
